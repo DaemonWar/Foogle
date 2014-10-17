@@ -1,5 +1,59 @@
+var waitForAutocomplete = 500;
+
+var currentAutocomplete = null;
+
+function showAutocomplete()
+{
+	$("#autocomplete").css("display", "block");
+}
+
+function hideAutocomplete()
+{
+	$("#autocomplete").css("display", "none");
+}
+
+
 $(function()
 {
+	$(document).keypress(function()
+	{
+		$("#search_field").focus();
+	});
+
+	$("#search_field").on("input", function(e)
+	{
+		if(currentAutocomplete)
+		{
+			clearTimeout(currentAutocomplete);
+		}
+
+		if($(this).val() != "")
+		{
+			currentAutocomplete = setTimeout(function()
+			{
+				showAutocomplete();
+
+				currentAutocomplete = null;
+			}, waitForAutocomplete);
+		} else
+		{
+			hideAutocomplete();
+		}
+	});
+
+	$("#search_field").keydown(function(e)
+	{
+		switch(e.which)
+		{
+			case 38:
+				e.preventDefault();
+				break;
+			case 40:
+				e.preventDefault();
+				break;
+    	}
+	});
+
 	if($.cookie('allowCookie') == undefined)
 	{
 		$.cookie('allowCookie', 'false');
@@ -28,6 +82,8 @@ $(function()
 	$("#search_field").blur(function(e)
 	{
 		$(this).parent().removeClass("active");
+
+		hideAutocomplete();
 	});
 
 	$("#logo>.two").click(animBall);
@@ -38,9 +94,12 @@ $(function()
 
 		searchStep();
 
-		alert("Not yet...");
-
-		$("#search_field").focus();
+		$("#search_field").blur();
+		
+		if(currentAutocomplete)
+		{
+			clearTimeout(currentAutocomplete);
+		}
 	});
 
 	$("#settings_button").click(openSettings);
@@ -94,14 +153,7 @@ function searchStep()
 	{
 		"background-color" : "#3A9D23",
 		"background-image" : "url('./img/loupe2.png')",
-		"right" : "0",
-		"width" : "38px",
-		"-webkit-border-top-right-radius": "3px",
-		"-webkit-border-bottom-right-radius": "3px",
-		"-moz-border-radius-topright": "3px",
-		"-moz-border-radius-bottomright": "3px",
-		"border-top-right-radius": "3px",
-		"border-bottom-right-radius": "3px"
+		"right" : "0"
 	});
 
 	$("#logo").remove();

@@ -8,14 +8,21 @@ html
 {
 	background-color: white;
 	height: 100%;
-	font-family: "Arial"
+	font-family: "Arial";
 }
 
 body
 {
 	position: relative;
+	z-index: -10;
 	height: 100%;
 	margin: 0px;
+}
+
+header
+{
+	position: relative;
+	z-index: -2;
 }
 
 *
@@ -125,25 +132,27 @@ body
 #search_field
 {
 	position: absolute;
-	top: 5px;
+	top: 4px;
 	left: 9px;
 	background-color: transparent;
 	padding: 0px;
 	width: 524px;
-	line-height: 18px;
+	line-height: 20px;
+	font-size: 17px;
+	font-family: "Arial";
 }
 
 #search_button
 {
 	position: absolute;
 	top: 0px;
-	right: 3px;
+	right: 0px;
 	background-color: transparent;
 	background-image: url("../img/loupe.png");
 	background-repeat: no-repeat;
 	background-size: 18px 18px;
 	background-position: center;
-	width: 28px;
+	width: 38px;
 	height: 28px;
 	padding: 0px;
 	box-sizing: content-box;
@@ -247,4 +256,26 @@ body
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
+}
+
+/***********************************/
+#autocomplete
+{
+	position: absolute;
+	z-index: -1;
+	background-color: white;
+	top: 28px;
+	left: -1px;
+	display: none;
+	width: 514px;
+	line-height: 20px;
+	padding: 5px 9px;
+	border: solid 1px #D8D8D8;
+	border-top: none;
+	font-size: 17px;
+
+	-moz-box-shadow: 0px 0px 5px 0px #999999;
+	-webkit-box-shadow: 0px 0px 5px 0px #999999;
+	-o-box-shadow: 0px 0px 5px 0px #999999;
+	box-shadow: 0px 0px 5px 0px #999999;
 }
