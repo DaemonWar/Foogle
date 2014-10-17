@@ -19,6 +19,8 @@ $(function()
 		searchStep();
 
 		alert("Not yet...");
+
+		$("#search_field").focus();
 	});
 
 	$("#logo_small").click(function(e)
