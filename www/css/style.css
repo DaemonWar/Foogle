@@ -14,7 +14,7 @@ html
 body
 {
 	position: relative;
-	z-index: -10;
+	z-index: 0;
 	height: 100%;
 	margin: 0px;
 }
@@ -22,7 +22,7 @@ body
 header
 {
 	position: relative;
-	z-index: -2;
+	z-index: 1;
 }
 
 *
@@ -204,6 +204,7 @@ header
 {
 	display: none;
 	position: fixed;
+	z-index: 99;
 	top: 0;
 	left: 0;
 	background-color: rgba(255,255,255,0.6);
@@ -262,14 +263,13 @@ header
 #autocomplete
 {
 	position: absolute;
-	z-index: -1;
+	z-index: 2;
 	background-color: white;
 	top: 28px;
 	left: -1px;
 	display: none;
-	width: 514px;
+	width: 532px;
 	line-height: 20px;
-	padding: 5px 9px;
 	border: solid 1px #D8D8D8;
 	border-top: none;
 	font-size: 17px;
@@ -278,4 +278,22 @@ header
 	-webkit-box-shadow: 0px 0px 5px 0px #999999;
 	-o-box-shadow: 0px 0px 5px 0px #999999;
 	box-shadow: 0px 0px 5px 0px #999999;
+}
+
+#autocomplete>ul
+{
+	list-style-type: none;
+	margin: 0px;
+	padding: 0px;
+}
+
+#autocomplete>ul>li
+{
+	padding: 0px 9px;
+	cursor: pointer;
+}
+
+#autocomplete>ul>li:hover
+{
+	background-color: #EEEEEE;
 }

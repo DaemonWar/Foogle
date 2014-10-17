@@ -54,6 +54,13 @@ $(function()
     	}
 	});
 
+	$("#autocomplete>ul>li").click(function(e)
+	{
+		$("#search_field").val($(this).text());
+
+		$("#search_form").submit();
+	});
+
 	if($.cookie('allowCookie') == undefined)
 	{
 		$.cookie('allowCookie', 'false');
@@ -82,8 +89,6 @@ $(function()
 	$("#search_field").blur(function(e)
 	{
 		$(this).parent().removeClass("active");
-
-		hideAutocomplete();
 	});
 
 	$("#logo>.two").click(animBall);
@@ -95,11 +100,13 @@ $(function()
 		searchStep();
 
 		$("#search_field").blur();
-		
+
 		if(currentAutocomplete)
 		{
 			clearTimeout(currentAutocomplete);
 		}
+
+		hideAutocomplete();
 	});
 
 	$("#settings_button").click(openSettings);
