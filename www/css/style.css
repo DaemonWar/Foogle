@@ -1,0 +1,148 @@
+@font-face
+{
+	font-family: "Catull";
+	src: url("../font/catull.ttf");
+}
+
+html
+{
+	background-color: white;
+	height: 100%;
+}
+
+body
+{
+	position: relative;
+	height: 100%;
+	margin: 0px;
+}
+
+*
+{
+	outline: none;
+}
+
+.noselect
+{
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#logo_small
+{
+	display: none;
+	background-image: url("../img/logo.png");
+	background-size: contain;
+	width: 100px;
+	height: 44px;
+	margin: 8px 20px 8px 15px;
+}
+
+#logo
+{
+	height: 132px;
+	margin: auto;
+	padding-top: 180px;
+	text-align: center;
+	font-family: "Catull";
+	font-size: 100px;
+}
+
+#logo>span
+{
+	display: inline-block;
+	cursor: default;
+}
+
+#logo>.one
+{
+	position: relative;
+	background-image: url("../img/logo_part_one.png");
+	background-repeat: no-repeat;
+	background-size: contain;
+	width: 113px;
+	height: 132px;
+}
+
+#logo>.two
+{
+	position: relative;
+	bottom: 34px;
+	background-image: url("../img/ball.gif");
+	background-repeat: no-repeat;
+	background-size: contain;
+	width: 54px;
+	height: 54px;
+	margin-left: 6px;
+	cursor: pointer;
+}
+
+#logo>.three
+{
+	position: relative;
+	background-image: url("../img/logo_part_two.png");
+	background-repeat: no-repeat;
+	background-size: contain;
+	width: 135px;
+	height: 132px;
+}
+
+#search_form
+{
+	position: relative;
+	background-color: white;
+	width: 570px;
+	height: 28px;
+	border: solid 1px #D8D8D8;
+	margin: auto;
+	margin-top: 30px;
+	font-size: 21px;
+}
+
+#search_form:hover
+{
+	border-color: #B2B2B2;
+}
+
+#search_form.active
+{
+	border-color: #3A9D23;
+}
+
+#search_form>input
+{
+	margin: 0px;
+	border: none;
+}
+
+#search_field
+{
+	position: absolute;
+	top: 5px;
+	left: 9px;
+	background-color: transparent;
+	padding: 0px;
+	width: 524px;
+	line-height: 18px;
+}
+
+#search_button
+{
+	position: absolute;
+	top: 0px;
+	right: 3px;
+	background-color: transparent;
+	background-image: url("../img/loupe.png");
+	background-repeat: no-repeat;
+	background-size: 18px 18px;
+	background-position: center;
+	width: 28px;
+	height: 28px;
+	padding: 0px;
+	box-sizing: content-box;
+	cursor: pointer;
+}
