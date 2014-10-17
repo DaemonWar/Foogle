@@ -23,6 +23,10 @@ $(function()
 		$("#search_field").focus();
 	});
 
+	$("#settings_button").click(openSettings);
+
+	$("#settings_close_button").click(closeSettings);
+
 	$("#logo_small").click(function(e)
 	{
 		window.location.href = "./";
@@ -30,6 +34,23 @@ $(function()
 
 	$("#search_field").focus();
 });
+
+var settingsModified = false;
+
+function openSettings(e)
+{
+	$("#settings").fadeIn(200);
+}
+
+function closeSettings(e)
+{
+	if(settingsModified)
+	{
+		//TODO demander d'enregistrer
+	}
+
+	$("#settings").fadeOut(200);
+}
 
 function searchStep()
 {
@@ -68,7 +89,7 @@ function animBall(e)
 	{
 		bottom : 110
 	},
-	1500,
+	800,
 	"easeOutQuad",
 	function()
 	{
