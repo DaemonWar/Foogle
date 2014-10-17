@@ -12,12 +12,12 @@ $(function()
 
 	$("#logo>.two").click(animBall);
 
-	$("#search_field").on("input", searchStep);
-
 	$("#search_form").submit(function(e)
 	{
 		e.preventDefault();
-		
+
+		searchStep();
+
 		alert("Not yet...");
 	});
 
@@ -29,7 +29,7 @@ $(function()
 	$("#search_field").focus();
 });
 
-function searchStep(e)
+function searchStep()
 {
 	$(this).off("input");
 
