@@ -1,11 +1,11 @@
 $(function()
 {
-	$("#search_field").focus(function()
+	$("#search_field").focus(function(e)
 	{
 		$(this).parent().addClass("active");
 	});
 
-	$("#search_field").blur(function()
+	$("#search_field").blur(function(e)
 	{
 		$(this).parent().removeClass("active");
 	});
@@ -13,6 +13,18 @@ $(function()
 	$("#logo>.two").click(animBall);
 
 	$("#search_field").on("input", searchStep);
+
+	$("#search_form").submit(function(e)
+	{
+		e.preventDefault();
+		
+		alert("Not yet...");
+	});
+
+	$("#logo_small").click(function(e)
+	{
+		window.location.href = "./";
+	});
 
 	$("#search_field").focus();
 });
