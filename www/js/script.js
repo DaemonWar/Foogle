@@ -1,5 +1,25 @@
 $(function()
 {
+	if($.cookie('allowCookie') == undefined)
+	{
+		$.cookie('allowCookie', 'false');
+	}
+
+	if($.cookie('allowCookie') == 'false')
+	{
+		$("#allow_cookie").submit(function(e)
+		{
+			e.preventDefault();
+
+			$.cookie('allowCookie', 'true');
+
+			$("#allow_cookie").remove();
+		});
+	} else if($.cookie('allowCookie') == 'true')
+	{
+		$("#allow_cookie").remove();
+	}
+
 	$("#search_field").focus(function(e)
 	{
 		$(this).parent().addClass("active");
@@ -75,7 +95,13 @@ function searchStep()
 		"background-color" : "#3A9D23",
 		"background-image" : "url('./img/loupe2.png')",
 		"right" : "0",
-		"width" : "38px"
+		"width" : "38px",
+		"-webkit-border-top-right-radius": "3px",
+		"-webkit-border-bottom-right-radius": "3px",
+		"-moz-border-radius-topright": "3px",
+		"-moz-border-radius-bottomright": "3px",
+		"border-top-right-radius": "3px",
+		"border-bottom-right-radius": "3px"
 	});
 
 	$("#logo").remove();
