@@ -293,7 +293,7 @@ header
 	cursor: pointer;
 }
 
-#autocomplete>ul>li:hover
+#autocomplete>ul>li:hover, #autocomplete>ul>li.active
 {
 	background-color: #EEEEEE;
 }

@@ -1,6 +1,7 @@
 var waitForAutocomplete = 500;
 
 var currentAutocomplete = null;
+var currentSelectedAutocomplete = null;
 
 function showAutocomplete()
 {
@@ -10,6 +11,10 @@ function showAutocomplete()
 function hideAutocomplete()
 {
 	$("#autocomplete").css("display", "none");
+
+	$("#autocomplete>ul>li").removeClass("active");
+
+	currentSelectedAutocomplete = null;
 }
 
 
@@ -45,11 +50,48 @@ $(function()
 	{
 		switch(e.which)
 		{
-			case 38:
+			case 40: //bas
 				e.preventDefault();
+				
+				var count = $("#autocomplete>ul>li").size();
+
+				if(currentSelectedAutocomplete == null)
+				{
+					currentSelectedAutocomplete = 1;
+				} else
+				{
+					currentSelectedAutocomplete = currentSelectedAutocomplete + 1 > count ? 1 : currentSelectedAutocomplete + 1;
+				}
+				$("#autocomplete>ul>li").removeClass("active");
+
+				var obj = $("#autocomplete>ul>li:nth-child(" + currentSelectedAutocomplete + ")");
+
+				obj.addClass("active");
+
+				$("#search_field").val(obj.text());
+
 				break;
-			case 40:
+			case 38: //haut
 				e.preventDefault();
+				
+				var count = $("#autocomplete>ul>li").size();
+
+				if(currentSelectedAutocomplete == null)
+				{
+					currentSelectedAutocomplete = count;
+				} else
+				{
+					currentSelectedAutocomplete = currentSelectedAutocomplete - 1 < 1 ? count : currentSelectedAutocomplete - 1;
+				}
+
+				$("#autocomplete>ul>li").removeClass("active");
+
+				var obj = $("#autocomplete>ul>li:nth-child(" + currentSelectedAutocomplete + ")");
+
+				obj.addClass("active");
+
+				$("#search_field").val(obj.text());
+
 				break;
     	}
 	});
