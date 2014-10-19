@@ -132,10 +132,11 @@ header
 #search_field
 {
 	position: absolute;
-	top: 4px;
-	left: 9px;
-	background-color: transparent;
-	padding: 0px;
+	z-index: 3;
+	top: 0px;
+	left: 0px;
+	background-color: white;
+	padding: 4px 0px 4px 9px;
 	width: 524px;
 	line-height: 20px;
 	font-size: 17px;
@@ -271,7 +272,6 @@ header
 	width: 532px;
 	line-height: 20px;
 	border: solid 1px #D8D8D8;
-	border-top: none;
 	font-size: 17px;
 
 	-moz-box-shadow: 0px 0px 5px 0px #999999;
@@ -287,10 +287,19 @@ header
 	padding: 0px;
 }
 
-#autocomplete>ul>li
+#autocomplete>ul>*
 {
 	padding: 0px 9px;
+}
+
+#autocomplete>ul>li
+{
 	cursor: pointer;
+}
+
+#autocomplete>ul>span
+{
+	font-style: italic;
 }
 
 #autocomplete>ul>li:hover, #autocomplete>ul>li.active
