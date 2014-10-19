@@ -1,27 +1,31 @@
 package com.foogle.rest;
 
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
+import org.json.JSONObject;
+
+import com.foogle.rest.utils.ServiceUtilities;
+
 @Path("/identifier")
 public class IdentifierService
 {
 	@GET
-	@Path("/get")
+	@Path("/get.json")
 	public Response getUiid()
 	{
 		try
 		{
-			return Response.status(200).entity(getRandomId(getDateId())).build();
+			JSONObject json = new JSONObject();
+			json.put("id", getRandomId(getDateId()));
+			 
+			return ServiceUtilities.formattedSuccessResponse(json.toString());
 		} catch (Exception e) 
 		{
-			return Response.status(501).build();
+			return ServiceUtilities.formattedFailResponse();
 		}
 	}
 	
