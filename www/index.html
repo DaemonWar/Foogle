@@ -13,6 +13,7 @@
 		<script src="./js/allowcookies.js"></script>
 		<script src="./js/script.js"></script>
 		<script src="./js/autocomplete.js"></script>
+		<script src="./js/settings.js"></script>
 
 		<title>Foogle</title>
 	</head>
@@ -32,6 +33,26 @@
 			</form>
 			<div id="settings_button">Settings</div>
 		</header>
+		<div id="results">
+			<div id="result_header">
+				<div class="tab">
+					<span class="on">Data warehouse</span>
+					<span>Text reports</span>
+					<span>DbPedia.com</span>
+				</div>
+				<span id="number_results">About 302 results</span>
+			</div>
+			<div class="result">
+				<a href="#" target="_blank">I am a result</a>
+				<span>www.iamthelink.com</span>
+				<p>I am the description of the result...</p>
+			</div>
+			<div class="result">
+				<a href="#" target="_blank">I am a result</a>
+				<span>www.iamthelink.com</span>
+				<p>I am the description of the result...</p>
+			</div>
+		</div>
 		<form id="allow_cookie">
 			By using our services, you agree to our use of cookies.
 			<input type="submit" value="Got it"/>
@@ -39,6 +60,10 @@
 		<div id="settings">
 			<div id="option_box">
 				<div id="settings_close_button"></div>
+				<h1>Data sources</h1>
+				<div id="dwh" class="option on">Data warehouse</div>
+				<div id="tere" class="option on">Text reports</div>
+				<div id="dbp" class="option on">DbPedia.com</div>
 			</div>
 		</div>
 	</body>
