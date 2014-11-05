@@ -372,9 +372,13 @@ header
 	margin-bottom: 20px;
 }
 
-.result
+.results_list
 {
 	margin-left: 140px;
+}
+
+.result
+{
 	margin-bottom: 30px;
 	width: 512px;
 	color: #545454;

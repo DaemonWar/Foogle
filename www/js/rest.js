@@ -12,10 +12,13 @@ function getResponseFromServer(service, fct, callback)
 		crossDomain: true
 	}).done(function(data)
 	{
-		callback(data);
+		if(callback)
+		{
+			callback(data);
+		}
 	})
-	.fail(function(a, b, c)
+	.fail(function()
 	{
-		//TODO
+		console.log("Server problem");
 	});
 }

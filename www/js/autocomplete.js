@@ -91,9 +91,9 @@ function autocompleteLiClick(obj)
 
 function showAutocomplete()
 {
-	//getResponseFromServer("query", "autocomplete/" + $("#search_field").val(), function(data)
-	//{
-		data = ["lalala", "lilili", "lolololo"];
+	getResponseFromServer("query", "autocomplete/" + $("#search_field").val(), function(data)
+	{
+		//data = ["lalala", "lilili", "lolololo", "je t'aime louloute"];
 		$("#autocomplete>ul>*").remove();
 
 		if(data.length == 0)
@@ -112,7 +112,7 @@ function showAutocomplete()
 		$("#autocomplete").css("display", "block");
 
 		currentAutocomplete = null;
-	//});
+	});
 }
 
 function hideAutocomplete()

@@ -7,7 +7,7 @@ import javax.persistence.Persistence;
 public class DAOSingleton
 {
 	private static EntityManagerFactory emf = Persistence
-			.createEntityManagerFactory("manager1");
+			.createEntityManagerFactory("managerLocal");
 	private static EntityManager em;
 
 	private DAOSingleton()

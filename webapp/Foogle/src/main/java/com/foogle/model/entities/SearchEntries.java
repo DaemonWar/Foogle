@@ -8,11 +8,11 @@ import javax.persistence.Table;
 @Table(name = "search_entries")
 public class SearchEntries extends AbstractEntity
 {
-	@Column(name = "query")
+	@Column(name = "query", nullable = false)
 	private String query;
 
-	@Column(name = "count")
-	private String count;
+	@Column(name = "count", nullable = false, columnDefinition = "int default 1")
+	private int count = 1;
 
 	public String getQuery()
 	{
@@ -24,12 +24,12 @@ public class SearchEntries extends AbstractEntity
 		this.query = query;
 	}
 
-	public String getCount()
+	public int getCount()
 	{
 		return count;
 	}
 
-	public void setCount(String count)
+	public void setCount(int count)
 	{
 		this.count = count;
 	}

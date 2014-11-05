@@ -17,9 +17,35 @@ public class DAOSearchEntries extends DAO<SearchEntries>
 					.setMaxResults(10).getResultList();
 		} catch (Exception e)
 		{
-			System.out.println("LOG FRANCK : " + e.getMessage());
 			return null;
 		}
 	}
 
+	public Integer find(String entry)
+	{
+		try
+		{
+			return (Integer) em.createQuery(
+					"SELECT se.id FROM SearchEntries se WHERE se.query LIKE '"
+							+ entry + "'").getSingleResult();
+		} catch (Exception e)
+		{
+			return null;
+		}
+	}
+
+	public void increment(Integer id)
+	{
+		try
+		{
+			SearchEntries se = find(id);
+			
+			se.setCount(se.getCount() + 1);
+			
+			update(se);
+		} catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+	}
 }

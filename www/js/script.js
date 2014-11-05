@@ -39,36 +39,126 @@ $(function()
 	});
 
 	$("#search_field").focus();
+
+	$("#dwh_tab").click(showDataWarehouseSearch);
+
+	$("#tere_tab").click(showTextReportsSearch);
+
+	$("#dbp_tab").click(showDbPediaSearch);
 });
+
+var searchMode = false;
+
+function updateTabButton()
+{
+	$(".search_tab").hide();
+
+	if($("#dbp").hasClass("on"))
+	{
+		$("#dbp_tab").show();
+
+		showDbPediaSearch();
+	}
+
+	if($("#tere").hasClass("on"))
+	{
+		$("#tere_tab").show();
+
+		showTextReportsSearch();
+	}
+	
+	if($("#dwh").hasClass("on"))
+	{
+		$("#dwh_tab").show();
+
+		showDataWarehouseSearch();
+	}
+
+}
+
+function showDataWarehouseSearch(e)
+{
+	$(".results_list").hide();
+
+	$(".search_tab").removeClass("on");
+
+	$("#dwh_tab").addClass("on");
+
+	$("#dwh_result").show();
+}
+
+function showTextReportsSearch(e)
+{
+	$(".results_list").hide();
+
+	$(".search_tab").removeClass("on");
+
+	$("#tere_tab").addClass("on");
+
+	$("#tere_result").show();
+}
+
+function showDbPediaSearch(e)
+{
+	$(".results_list").hide();
+
+	$(".search_tab").removeClass("on");
+
+	$("#dbp_tab").addClass("on");
+
+	$("#dbp_result").show();
+}
 
 function searchStep()
 {
-	$(this).off("input");
+	updateTabButton();
 
-	$("#logo_small").css("display", "inline-block");
+	saveQuery();
 
-	$("#results").css("display", "block");
-
-	$("header").css(
+	if(!searchMode)
 	{
-		"background-color" : "#EBEFF3",
-		"height" : "60px"
-	});
+		$(this).off("input");
 
-	$("#search_form").css(
+		$("#logo_small").css("display", "inline-block");
+
+		$("#results").css("display", "block");
+
+		$("header").css(
+		{
+			"background-color" : "#EBEFF3",
+			"height" : "60px"
+		});
+
+		$("#search_form").css(
+		{
+			"display": "inline-block",
+			"margin" : "15px 0px"
+		});
+
+		$("#search_button").css(
+		{
+			"background-color" : "#3A9D23",
+			"background-image" : "url('./img/loupe2.png')",
+			"right" : "0"
+		});
+
+		$("#logo").remove();
+
+		searchMode = true;
+	}
+}
+
+function saveQuery()
+{
+	var input = $("#search_field").val();
+
+	if (input != "")
 	{
-		"display": "inline-block",
-		"margin" : "15px 0px"
-	});
-
-	$("#search_button").css(
-	{
-		"background-color" : "#3A9D23",
-		"background-image" : "url('./img/loupe2.png')",
-		"right" : "0"
-	});
-
-	$("#logo").remove();
+		getResponseFromServer("query", "put/" + input, function(data)
+			{
+				console.log(data);
+			});
+	}
 }
 
 function animBall(e)

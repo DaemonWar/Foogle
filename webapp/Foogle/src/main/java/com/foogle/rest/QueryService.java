@@ -30,4 +30,13 @@ public class QueryService
 		
 		return ServiceUtilities.formattedSuccessResponse(json.toString());
 	}
+	
+	@GET
+	@Path("/put/{query}")
+	public Response put(@PathParam("query") String entry)
+	{
+		QueriesManager.putEntry(entry);
+		
+		return ServiceUtilities.formattedSuccessResponse("OK");
+	}
 }
