@@ -83,7 +83,6 @@ $("#search_field").on("input", function(e)
 
 function autocompleteLiClick(obj)
 {
-	console.log("click !");
 	$("#search_field").val($(obj).text());
 
 	$("#search_form").submit();

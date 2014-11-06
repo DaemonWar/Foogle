@@ -22,3 +22,25 @@ function getResponseFromServer(service, fct, callback)
 		console.log("Server problem");
 	});
 }
+
+function getResponseDbPedia(input, callback)
+{
+	console.log(input);
+	$.ajax(
+	{
+		type: "GET",
+		url: "http://lookup.dbpedia.org/api/search/KeywordSearch?MaxHits=50&QueryString=" + input,
+		dataType: 'json',
+		crossDomain: true
+	}).done(function(data)
+	{
+		if(callback)
+		{
+			callback(data);
+		}
+	})
+	.fail(function()
+	{
+		console.log("Server problem");
+	});
+}

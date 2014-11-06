@@ -45,7 +45,12 @@ $(function()
 	$("#tere_tab").click(showTextReportsSearch);
 
 	$("#dbp_tab").click(showDbPediaSearch);
+
+	searchPattern = $("#search_pattern").html();
+	$("#search_pattern").remove();
 });
+
+var searchPattern;
 
 var searchMode = false;
 
@@ -58,6 +63,8 @@ function updateTabButton()
 		$("#dbp_tab").show();
 
 		showDbPediaSearch();
+
+		searchOnDbPedia();
 	}
 
 	if($("#tere").hasClass("on"))
@@ -182,6 +189,24 @@ function animBall(e)
 		function()
 		{
 			$(this).click(animBall);
+		});
+	});
+}
+
+function searchOnDbPedia()
+{
+	$("#dbp_result").html("");
+
+	getResponseDbPedia($("#search_field").val(), function(data)
+	{
+		data.results.forEach(function(entry)
+		{
+			var obj = $(searchPattern);
+			obj.find("a").attr("href", entry.uri).text(entry.label);
+			obj.find("span").text(entry.uri);
+			obj.find("p").text(entry.description);
+
+			$("#dbp_result").append(obj);
 		});
 	});
 }
