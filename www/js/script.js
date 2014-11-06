@@ -204,7 +204,13 @@ function searchOnDbPedia()
 			var obj = $(searchPattern);
 			obj.find("a").attr("href", entry.uri).text(entry.label);
 			obj.find("span").text(entry.uri);
-			obj.find("p").text(entry.description);
+			if(entry.description != undefined && entry.description != "")
+			{
+				obj.find("p").text(entry.description);	
+			} else
+			{
+				obj.find("p").text("No desciption");
+			}
 
 			$("#dbp_result").append(obj);
 		});
