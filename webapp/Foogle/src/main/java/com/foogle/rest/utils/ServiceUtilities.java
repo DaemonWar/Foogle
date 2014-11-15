@@ -11,6 +11,6 @@ public class ServiceUtilities
 
 	public static Response formattedFailResponse()
 	{
-		return Response.status(501).build();
+		return Response.status(501).header("Access-Control-Allow-Origin", "*").build();
 	}
 }
