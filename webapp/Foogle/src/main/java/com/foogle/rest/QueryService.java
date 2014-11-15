@@ -8,6 +8,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.foogle.model.manager.QueriesManager;
 import com.foogle.rest.utils.ServiceUtilities;
@@ -35,8 +36,37 @@ public class QueryService
 	@Path("/put/{query}")
 	public Response put(@PathParam("query") String entry)
 	{
-		QueriesManager.putEntry(entry);
-		
-		return ServiceUtilities.formattedSuccessResponse("OK");
+		try
+		{
+			JSONObject json = new JSONObject();
+			
+			json.put("response", "OK");
+			
+			QueriesManager.putEntry(entry);
+			
+			return ServiceUtilities.formattedSuccessResponse(json.toString());
+		} catch (Exception e) 
+		{
+			return ServiceUtilities.formattedFailResponse();
+		}
+	}
+	
+	@GET
+	@Path("/save/{query}/{user}/{session}")
+	public Response save(@PathParam("query") String entry, @PathParam("user") String user, @PathParam("session") String session)
+	{
+		try
+		{
+			JSONObject json = new JSONObject();
+			
+			json.put("response", "OK");
+			
+			QueriesManager.putSessionEntry(entry, user, session);
+			
+			return ServiceUtilities.formattedSuccessResponse(json.toString());
+		} catch (Exception e) 
+		{
+			return ServiceUtilities.formattedFailResponse();
+		}
 	}
 }
