@@ -80,7 +80,6 @@ function updateTabButton()
 
 		showDataWarehouseSearch();
 	}
-
 }
 
 function showDataWarehouseSearch(e)
@@ -116,9 +115,42 @@ function showDbPediaSearch(e)
 	$("#dbp_result").show();
 }
 
+function updateRecommendations()
+{
+	var input = $("#search_field").val();
+
+	if (input != "")
+	{
+		getResponseFromServer("reco", "for/" + input, function(data)
+		{
+			$("#recommendations>span").remove();
+
+			$("#recommendations_container").hide();
+
+			if(data.length != 0)
+			{
+				data.forEach(function(entry)
+				{
+					$("#recommendations").append($("<span></span>").text(entry));
+				});
+
+				$("#recommendations>span").click(function(e)
+				{
+					$("#search_field").val($(this).text());
+					$("#search_form").submit();
+				});
+				
+				$("#recommendations_container").show();
+			}
+		});
+	}
+}
+
 function searchStep()
 {
 	updateTabButton();
+
+	updateRecommendations();
 
 	saveQuery();
 
@@ -161,10 +193,13 @@ function saveQuery()
 
 	if (input != "")
 	{
-		getResponseFromServer("query", "put/" + input, function(data)
+		getResponseFromServer("query", "put/" + input, function()
+		{
+			if($.cookie("userId") != undefined && $.cookie("sessionId") != undefined)
 			{
-				console.log(data);
-			});
+				getResponseFromServer("query", "save/" + input + "/" + $.cookie("userId") + "/" + $.cookie("sessionId"));
+			}
+		});
 	}
 }
 

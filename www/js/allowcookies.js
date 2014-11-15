@@ -15,23 +15,35 @@ $(function()
 
 			$("#allow_cookie").remove();
 
-			getIdentifier();
+			getUserId();
+
+			getSessionId();
 		});
 	} else if($.cookie('allowCookie') == 'true')
 	{
 		$("#allow_cookie").remove();
 
-		getIdentifier();
+		getUserId();
+
+		getSessionId();
 	}
 });
 
-function getIdentifier()
+function getUserId()
 {
-	if($.cookie('userID') == undefined)
+	if($.cookie('userId') == undefined)
 	{
-		getResponseFromServer("identifier", "get.json", function(data)
+		getResponseFromServer("id", "newUser", function(data)
 		{
-			$.cookie('userID', data.id);
+			$.cookie('userId', data.id);
 		});
 	}
+}
+
+function getSessionId()
+{
+	getResponseFromServer("id", "newSession", function(data)
+	{
+		$.cookie('sessionId', data.id);
+	});
 }

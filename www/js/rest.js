@@ -4,6 +4,8 @@ var serverAddress = "http://localhost:8080/Foogle/rest/";
 
 function getResponseFromServer(service, fct, callback)
 {
+	//console.log(service + "/" + fct);
+
 	$.ajax(
 	{
 		type: "GET",
@@ -16,8 +18,7 @@ function getResponseFromServer(service, fct, callback)
 		{
 			callback(data);
 		}
-	})
-	.fail(function()
+	}).fail(function()
 	{
 		console.log("Server problem");
 	});
@@ -25,7 +26,6 @@ function getResponseFromServer(service, fct, callback)
 
 function getResponseDbPedia(input, callback)
 {
-	console.log(input);
 	$.ajax(
 	{
 		type: "GET",
@@ -38,8 +38,7 @@ function getResponseDbPedia(input, callback)
 		{
 			callback(data);
 		}
-	})
-	.fail(function()
+	}).fail(function()
 	{
 		console.log("Server problem");
 	});

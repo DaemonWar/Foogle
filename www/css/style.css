@@ -335,6 +335,7 @@ header
 
 #results
 {
+	position: relative;
 	display: none;
 }
 
@@ -412,4 +413,37 @@ header
 	max-height: 35px;
 	text-overflow: ellipsis;
 	overflow: hidden;
+}
+
+#recommendations_container
+{
+	position: absolute;
+	top: 100px;
+	right: 80px;
+	border: 1px solid #EBEBEB;
+	padding: 10px;
+	width: 400px;
+	color: #777;
+	font-weight: bold;
+	box-sizing: border-box;
+}
+
+#recommendations
+{
+	margin-top: 20px;
+}
+
+#recommendations>span
+{
+	display: block;
+	margin-top: 10px;
+	color: #00529B;
+	font-size: 18px;
+	font-weight: normal;
+	cursor: pointer;
+}
+
+#recommendations>span:hover
+{
+	text-decoration: underline;
 }
