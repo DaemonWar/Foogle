@@ -10,17 +10,29 @@ import org.json.JSONObject;
 
 import com.foogle.rest.utils.ServiceUtilities;
 
-@Path("/identifier")
+@Path("/id")
 public class IdentifierService
 {
 	@GET
-	@Path("/get.json")
-	public Response getUiid()
+	@Path("/newUser")
+	public Response getNewUser()
+	{
+		return getId("u_");
+	}
+	
+	@GET
+	@Path("/newSession")
+	public Response getNewSession()
+	{
+		return getId("s_");
+	}
+	
+	private Response getId(String prefix)
 	{
 		try
 		{
 			JSONObject json = new JSONObject();
-			json.put("id", getRandomId(getDateId()));
+			json.put("id", prefix + getRandomId(getTimeStamp()));
 			 
 			return ServiceUtilities.formattedSuccessResponse(json.toString());
 		} catch (Exception e) 
@@ -29,7 +41,7 @@ public class IdentifierService
 		}
 	}
 	
-	private String getDateId()
+	private String getTimeStamp()
 	{
 		Date d = new Date();
 		
@@ -38,7 +50,7 @@ public class IdentifierService
 	
 	private String getRandomId(String base)
 	{
-		String rid = base + String.valueOf(Math.random() * 1000);
+		String rid = base + String.valueOf(Math.round(Math.random() * 1000));
 		
 		return rid;
 	}
