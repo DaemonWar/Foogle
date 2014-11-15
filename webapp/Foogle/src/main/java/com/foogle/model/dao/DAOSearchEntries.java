@@ -21,12 +21,25 @@ public class DAOSearchEntries extends DAO<SearchEntries>
 		}
 	}
 
-	public Integer find(String entry)
+	public Integer findId(String entry)
 	{
 		try
 		{
 			return (Integer) em.createQuery(
 					"SELECT se.id FROM SearchEntries se WHERE se.query LIKE '"
+							+ entry + "'").getSingleResult();
+		} catch (Exception e)
+		{
+			return null;
+		}
+	}
+
+	public SearchEntries findObject(String entry)
+	{
+		try
+		{
+			return (SearchEntries) em.createQuery(
+					"SELECT se FROM SearchEntries se WHERE se.query LIKE '"
 							+ entry + "'").getSingleResult();
 		} catch (Exception e)
 		{
