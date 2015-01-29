@@ -53,14 +53,39 @@ public class QueriesManager
 
 	public static ArrayList<String> findRecommendationsFor(String entry)
 	{
+		int maxResult = 4;
 		// TODO Algo de recommandation
 		
-		ArrayList<String> returnObject = new ArrayList<String>();
-
-		returnObject.add("World Cup 2014");
-		returnObject.add("World Cup 2008");
-		returnObject.add("Zinedine Zidane");
-		returnObject.add("Fifa rules");
+		ArrayList<String> returnObject = null;
+		
+		DAOSearchEntries dse = new DAOSearchEntries();
+		DAOSessionEntries dsse = new DAOSessionEntries();
+		
+		Integer entryId = dse.findId(entry);
+		
+		//Trouver si la requête a déjà été faite
+		if (entryId == null)
+		{
+			//Si oui, trouver...
+			ArrayList<SearchEntries> entries = dsse.getRecommandedEntries(entryId, maxResult);
+			
+			if (entries == null)
+			{
+				returnObject = dse.getCommonEntries(maxResult);
+			} else
+			{
+				returnObject = new ArrayList<String>();
+				
+				for (SearchEntries searchEntries : entries)
+				{
+					returnObject.add(searchEntries.getQuery());
+				}
+			}
+		} else
+		{
+			//Sinon, les X requêtes les plus faites
+			returnObject = dse.getCommonEntries(maxResult);
+		}
 		
 		return returnObject;
 	}

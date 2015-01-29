@@ -61,4 +61,18 @@ public class DAOSearchEntries extends DAO<SearchEntries>
 			System.out.println(e.getMessage());
 		}
 	}
+
+	public ArrayList<String> getCommonEntries(int maxResult)
+	{
+		try
+		{
+			return (ArrayList<String>) em
+					.createQuery(
+							"SELECT se.query FROM SearchEntries se ORDER BY se.count DESC")
+					.setMaxResults(maxResult).getResultList();
+		} catch (Exception e)
+		{
+			return null;
+		}
+	}
 }
