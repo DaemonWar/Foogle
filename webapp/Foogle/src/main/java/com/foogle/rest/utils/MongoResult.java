@@ -1,11 +1,16 @@
 package com.foogle.rest.utils;
 
-public class MongoResult implements Comparable<MongoResult>{
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-	String title;
-	String source;
-	String content;
-	Double scoring;
+public class MongoResult implements Comparable<MongoResult>{
+	
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+
+	private String title;
+	private String source;
+	private String content;
+	private Double scoring;
 	public MongoResult(String title, String source, String content,
 			String scoring) {
 		super();

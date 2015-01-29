@@ -1,7 +1,9 @@
 package com.foogle.rest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -9,6 +11,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -29,7 +32,8 @@ public class TestService {
 	public Response findQueriesFor(@PathParam("query") String entry)
 	{
 		ArrayList<String> keywordList = new ArrayList<String>();
-		JSONObject jsonObj = new JSONObject();
+		JSONArray jsonList = new JSONArray();
+
 
 		for(String query : entry.split("\\s+"))
 		{
@@ -38,23 +42,16 @@ public class TestService {
 
 		ArrayList<MongoResult> resultList = TextEntryManager.find(keywordList);
 
-		try {
-			jsonObj.put("resultNumber", resultList.size());
+		for(MongoResult mResult : resultList)
+		{
+			Map<String, String> m = new HashMap<String, String>();
+			m.put("title", mResult.getTitle());
+			m.put("source", mResult.getSource());
+			m.put("content", mResult.getContent());
 
-			for(int i=0;i<resultList.size();i++)
-			{
-				JSONObject json = new JSONObject();
-				json.put("title",resultList.get(i).getTitle());
-				json.put("source",resultList.get(i).getSource());
-				json.put("content",resultList.get(i).getContent());
-
-				jsonObj.put("result"+i, json);
-			}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			jsonList.put(m);
 		}
 
-		return ServiceUtilities.formattedSuccessResponse(jsonObj.toString());
+		return ServiceUtilities.formattedSuccessResponse(jsonList.toString());
 	}
 }
