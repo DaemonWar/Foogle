@@ -16,9 +16,19 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<servlet>
+		<servlet-name>Load</servlet-name>
+		<display-name>Load</display-name>
+		<description></description>
+		<servlet-class>com.foogle.servlet.Load</servlet-class>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>jersey-serlvet</servlet-name>
 		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Load</servlet-name>
+		<url-pattern>/load</url-pattern>
 	</servlet-mapping>
 </web-app>
