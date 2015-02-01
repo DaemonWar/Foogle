@@ -1,7 +1,8 @@
 package com.foogle.rest;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -9,12 +10,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.foogle.model.manager.TextEntryManager;
+import com.foogle.model.manager.QueriesManager;
 import com.foogle.rest.utils.MongoResult;
 import com.foogle.rest.utils.ServiceUtilities;
 
@@ -29,32 +29,33 @@ public class TestService {
 	public Response findQueriesFor(@PathParam("query") String entry)
 	{
 		ArrayList<String> keywordList = new ArrayList<String>();
-		JSONObject jsonObj = new JSONObject();
+		JSONArray jsonList = new JSONArray();
 
+		// TODO Lucene here
+		
+		
+		String result = QueriesManager.lucene(entry);
+		logger.info("Lucene result: "+result);
+		
+		
+		// DEPRECATED 
 		for(String query : entry.split("\\s+"))
 		{
-			keywordList.add(query);System.out.println("keyword: "+query);
+			keywordList.add(query);
 		}
 
-		ArrayList<MongoResult> resultList = TextEntryManager.find(keywordList);
+		ArrayList<MongoResult> resultList = QueriesManager.findMongoResult(result);
 
-		try {
-			jsonObj.put("resultNumber", resultList.size());
+		for(MongoResult mResult : resultList)
+		{
+			Map<String, String> m = new HashMap<String, String>();
+			m.put("title", mResult.getTitle());
+			m.put("source", mResult.getSource());
+			m.put("content", mResult.getContent());
 
-			for(int i=0;i<resultList.size();i++)
-			{
-				JSONObject json = new JSONObject();
-				json.put("title",resultList.get(i).getTitle());
-				json.put("source",resultList.get(i).getSource());
-				json.put("content",resultList.get(i).getContent());
-
-				jsonObj.put("result"+i, json);
-			}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			jsonList.put(m);
 		}
 
-		return ServiceUtilities.formattedSuccessResponse(jsonObj.toString());
+		return ServiceUtilities.formattedSuccessResponse(jsonList.toString());
 	}
 }
