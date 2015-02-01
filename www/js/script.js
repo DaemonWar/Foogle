@@ -46,6 +46,8 @@ $(function()
 
 	$("#dbp_tab").click(showDbPediaSearch);
 
+	$("#web_tab").click(showWebSearch);
+
 	searchPattern = $("#search_pattern").html();
 	$("#search_pattern").remove();
 });
@@ -57,6 +59,15 @@ var searchMode = false;
 function updateTabButton()
 {
 	$(".search_tab").hide();
+	
+	if($("#web").hasClass("on"))
+	{
+		$("#web_tab").show();
+
+		showWebSearch();
+
+		searchOnWeb();
+	}
 
 	if($("#dbp").hasClass("on"))
 	{
@@ -113,6 +124,17 @@ function showDbPediaSearch(e)
 	$("#dbp_tab").addClass("on");
 
 	$("#dbp_result").show();
+}
+
+function showWebSearch(e)
+{
+	$(".results_list").hide();
+
+	$(".search_tab").removeClass("on");
+
+	$("#web_tab").addClass("on");
+
+	$("#web_result").show();
 }
 
 function updateRecommendations()
@@ -248,6 +270,30 @@ function searchOnDbPedia()
 			}
 
 			$("#dbp_result").append(obj);
+		});
+	});
+}
+
+function searchOnWeb()
+{
+	$("#web_result").html("");
+
+	getResponseWeb($("#search_field").val(), function(data)
+	{
+		data.forEach(function(entry)
+		{
+			var obj = $(searchPattern);
+			obj.find("a").attr("href", entry.url).text(entry.titleNoFormatting);
+			obj.find("span").text(entry.url);
+			if(entry.content != undefined && entry.content != "")
+			{
+				obj.find("p").html(entry.content);	
+			} else
+			{
+				obj.find("p").text("No desciption");
+			}
+
+			$("#web_result").append(obj);
 		});
 	});
 }

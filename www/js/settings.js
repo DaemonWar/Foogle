@@ -54,6 +54,14 @@ function initOptions()
 		{
 			$("#dbp").removeClass("on");
 		}
+
+		if($.cookie('web') == undefined)
+		{
+			$.cookie('web', true);
+		} else if($.cookie('web') == "false")
+		{
+			$("#web").removeClass("on");
+		}
 	}
 }
 
@@ -66,6 +74,8 @@ function saveOptions()
 		$.cookie('tere', $("#tere").hasClass("on"));
 		
 		$.cookie('dbp', $("#dbp").hasClass("on"));
+
+		$.cookie('web', $("#web").hasClass("on"));
 	}
 }
 

@@ -43,3 +43,47 @@ function getResponseDbPedia(input, callback)
 		console.log("Server problem");
 	});
 }
+
+function getResponseWeb(input, callback, webLoop, fullWebData)
+{
+	if(!webLoop)
+	{
+		webLoop = 0;
+	}
+
+	if(!fullWebData)
+	{
+		fullWebData = [];
+	}
+
+	$.ajax(
+	{
+		type: "GET",
+		url: "http://ajax.googleapis.com/ajax/services/search/web?v=1.0&rsz=8&q=" + input + "&start=" + webLoop,
+		dataType: 'jsonp',
+		crossDomain: true
+	}).done(function(data)
+	{
+		if(webLoop != 80 && data.responseData != null) 
+		{
+			webLoop += 8;
+
+			fullWebData = fullWebData.concat(data.responseData.results);
+
+			getResponseWeb(input, callback, webLoop, fullWebData);
+		} else
+		{
+			webLoop = 0;
+
+			if(callback)
+			{
+				callback(fullWebData);
+			}
+
+			fullWebData = [];
+		}
+	}).fail(function()
+	{
+		console.log("Server problem");
+	});
+}
