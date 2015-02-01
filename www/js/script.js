@@ -1,5 +1,7 @@
 $(function()
 {
+	$("#tere_close_button").click(closeTextReportsPopup);
+
 	$(document).keypress(function()
 	{
 		$("#search_field").focus();
@@ -83,6 +85,8 @@ function updateTabButton()
 		$("#tere_tab").show();
 
 		showTextReportsSearch();
+
+		searchInTextReports();
 	}
 	
 	if($("#dwh").hasClass("on"))
@@ -296,4 +300,53 @@ function searchOnWeb()
 			$("#web_result").append(obj);
 		});
 	});
+}
+
+function searchInTextReports()
+{
+	$("#tere_result").html("");
+
+	getResponseFromServer("find", $("#search_field").val(), function(data)
+	{
+		data.forEach(function(entry)
+		{
+			var obj = $(searchPattern);
+			obj.find("a").text(entry.title).removeAttr("target").removeAttr("href");
+			obj.find("span").text(entry.source);
+			if(entry.content != undefined && entry.content != "")
+			{
+				obj.find("p").html(entry.content.replace("\n\r", "<br/><br/>"));	
+			} else
+			{
+				obj.find("p").text("No desciption");
+			}
+
+			obj.click(textReportsPopup);
+
+			$("#tere_result").append(obj);
+		});
+	});
+}
+
+function textReportsPopup(e)
+{
+	var result = $(this);
+
+	$(".tere_title").text(result.find("a").text());
+
+	$(".tere_content").html(result.find("p").html());
+	
+	$(".tere_source").text(result.find("span").text());
+
+	openTextReportsPopup();
+}
+
+function openTextReportsPopup(e)
+{
+	$("#tere_popup").fadeIn(200);
+}
+
+function closeTextReportsPopup(e)
+{
+	$("#tere_popup").fadeOut(200);
 }
