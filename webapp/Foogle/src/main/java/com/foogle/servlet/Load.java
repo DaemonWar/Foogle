@@ -80,7 +80,8 @@ public class Load extends HttpServlet {
 		      
 		    String title = text.split("\r\n")[0];
 		    String source = text.split("\r\n")[1];
-		    String content = text.split("\r\n")[3];
+		    int startContent = text.indexOf("\r\n", text.indexOf("\r\n", text.indexOf("\r\n")+1)+1);
+		    String content = text.substring(startContent, text.length());
 		    
 			coll.insert(new BasicDBObject("title", title).append("source", source).append("content", content));
 		}
