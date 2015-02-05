@@ -58,4 +58,12 @@ public class TestService {
 
 		return ServiceUtilities.formattedSuccessResponse(jsonList.toString());
 	}
+	
+	@GET
+	@Produces("application/json")
+	public Response findDWHr(@PathParam("query") String entry)
+	{
+		QueriesManager.findInDwhFor("test");
+		return null;
+	}
 }
