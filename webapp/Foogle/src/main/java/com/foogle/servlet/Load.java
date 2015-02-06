@@ -1,13 +1,8 @@
 package com.foogle.servlet;
 
-import java.awt.List;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,7 +19,6 @@ import com.foogle.model.dao.DAOTextEntry;
 import com.foogle.model.entities.TextEntry;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 
 /**

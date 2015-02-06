@@ -177,7 +177,7 @@ public class QueriesManager
 
 		List<String> hebergementCoupe = dse.findSQL("select distinct(country) from team_dim");
 
-		List<Integer> anneeCoupe = dse.findSQL("select year from cup_dim order by year");
+		List<Integer> anneeCoupe = dse.findSQL("select year from cup_dim order by year desc");
 
 
 		ArrayList<MatchEntity> matchList = new ArrayList<MatchEntity>();
