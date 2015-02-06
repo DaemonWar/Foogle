@@ -92,7 +92,15 @@
 			<version>4.10.3</version>
 			<scope>compile</scope>
 		</dependency>
+		
+		<!-- Postgres connector 9.2+ -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.3-1100-jdbc41</version>
+		</dependency>
 
+		<!-- servlet -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>

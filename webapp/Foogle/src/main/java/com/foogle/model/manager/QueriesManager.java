@@ -10,11 +10,13 @@ import org.mongodb.morphia.Morphia;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.foogle.model.dao.DAO;
 import com.foogle.model.dao.DAOMongoSingleton;
 import com.foogle.model.dao.DAORecommendationEntries;
 import com.foogle.model.dao.DAOSearchEntries;
 import com.foogle.model.dao.DAOSessionEntries;
 import com.foogle.model.dao.DAOTextEntry;
+import com.foogle.model.dao.DAOdwhSingleton;
 import com.foogle.model.dao.DAOWordEntries;
 import com.foogle.model.entities.SearchEntries;
 import com.foogle.model.entities.SessionEntries;
@@ -29,8 +31,8 @@ import com.mongodb.MongoClient;
 
 public class QueriesManager
 {
-	private static final Logger logger = LoggerFactory.getLogger(QueriesManager.class);
-
+	private final static Logger logger = LoggerFactory.getLogger(QueriesManager.class);
+	
 	public static ArrayList<String> findQueriesFor(String entry)
 	{
 		DAOSearchEntries dse = new DAOSearchEntries();
@@ -130,9 +132,6 @@ public class QueriesManager
 		 * return returnObject;
 		 */
 	}
-
-	public static ArrayList<MongoResult> findMongoResult(String entry)
-	{
 
 		// DAO
 		MongoClient mongo = DAOMongoSingleton.getMongo();

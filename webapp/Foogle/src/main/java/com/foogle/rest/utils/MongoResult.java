@@ -31,7 +31,6 @@ public class MongoResult implements Comparable<MongoResult>{
 	public Double getScoring() {
 		return scoring;
 	}
-	@Override
 	public int compareTo(MongoResult o) {
 		Double nombre1 =  o.getScoring(); 
 		Double nombre2 = this.getScoring(); 

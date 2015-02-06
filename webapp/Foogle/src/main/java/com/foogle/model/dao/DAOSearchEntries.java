@@ -1,11 +1,26 @@
 package com.foogle.model.dao;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.foogle.model.entities.SearchEntries;
 
 public class DAOSearchEntries extends DAO<SearchEntries>
 {
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+	
+	public DAOSearchEntries (){}
+	
+	public DAOSearchEntries (EntityManager em){
+		super(em);
+	}
+	
 	public ArrayList<String> findFor(String entry)
 	{
 		try
@@ -72,6 +87,22 @@ public class DAOSearchEntries extends DAO<SearchEntries>
 					.setMaxResults(maxResult).getResultList();
 		} catch (Exception e)
 		{
+			return null;
+		}
+	}
+	
+	public List findSQL(String sql, String... paramters) {
+		try{
+			Query q = em.createNativeQuery(sql);//"select id from users where username = :username"
+			
+			for (int i=0;i<paramters.length;i+=2){
+				q.setParameter(paramters[i], paramters[i+1]);//q.setParameter("username", "lt");
+				logger.info(paramters[i]+" :: "+paramters[i+1]);
+			}
+			
+			List<String> values = q.getResultList();
+			return values;
+		}catch (Exception e) {
 			return null;
 		}
 	}
