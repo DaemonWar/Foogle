@@ -172,9 +172,8 @@ public class QueriesManager
 		return mongoResultList;
 	}
 
-	public static JSONArray findInDwhFor(List<String> entryList){
+	public static JSONObject findInDwhFor(List<String> entryList){
 		DAOSearchEntries dse = new DAOSearchEntries(DAOdwhSingleton.openConnection());
-		JSONArray jsonArray = new JSONArray();
 
 		List<String> hebergementCoupe = dse.findSQL("select distinct(country) from team_dim");
 
@@ -220,14 +219,22 @@ public class QueriesManager
 			for(Integer result : resultList){
 				jsonArrayTemp.put(result);
 			}
+			
+			JSONObject jSonObj = new JSONObject();
 			try {
-				jsonObj.put("data", jsonArrayTemp);
-				jsonObj.put("header", country1);
-				jsonObj.put("title", "Years of hosting");
+				jSonObj.put("data", jsonArrayTemp);
+				jSonObj.put("header", country1);
+				jSonObj.put("title", "Years of hosting");
 
-				jsonArray.put(jsonObj);
+//				jsonArray.put(jsonObj);
 			} catch (JSONException e) {
 				e.printStackTrace();
+			}
+			try {
+				jsonObj.put("type", 2);
+				jsonObj.put("result", jSonObj);
+			} catch (JSONException e1) {
+				e1.printStackTrace();
 			}
 		}
 
@@ -265,13 +272,8 @@ public class QueriesManager
 				bmatch = true;
 			}
 			//JSON
-			JSONObject jSonObjTemp = new JSONObject();
 			JSONArray jsonArrayTemp = new JSONArray();
-			try {
-				jSonObjTemp.put("type", 1);
-			} catch (JSONException e1) {
-				e1.printStackTrace();
-			}
+	
 			for(MatchEntity match : matchList){
 				if(match.year == year){
 					try {
@@ -289,8 +291,8 @@ public class QueriesManager
 					}
 				}
 			}try {
-				jSonObjTemp.put("result", jsonArrayTemp);
-				jsonArray.put(jSonObjTemp);
+				jsonObj.put("type", 1);
+				jsonObj.put("result", jsonArrayTemp);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -344,13 +346,7 @@ public class QueriesManager
 				}
 			}
 			//JSON
-			JSONObject jSonObjTemp = new JSONObject();
 			JSONArray jsonArrayTemp = new JSONArray();
-			try {
-				jSonObjTemp.put("type", 1);
-			} catch (JSONException e1) {
-				e1.printStackTrace();
-			}
 
 			for(MatchEntity match : matchList){
 				try {
@@ -367,8 +363,8 @@ public class QueriesManager
 					e.printStackTrace();
 				}
 			}try {
-				jSonObjTemp.put("result", jsonArrayTemp);
-				jsonArray.put(jSonObjTemp);
+				jsonObj.put("result", jsonArrayTemp);
+				jsonObj.put("type", 1);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -377,7 +373,7 @@ public class QueriesManager
 
 
 
-		return jsonArray;
+		return jsonObj;
 
 		//        for(String result : resultList){
 		//            logger.info("result :: "+result);

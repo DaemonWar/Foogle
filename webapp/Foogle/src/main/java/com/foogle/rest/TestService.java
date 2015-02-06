@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,8 +67,8 @@ public class TestService
 		
 		List<String> keywordList = utils.tokenizer(entry);
 		
-		JSONArray jsonArray = QueriesManager.findInDwhFor(keywordList);
-		logger.info(jsonArray.toString());
-		return ServiceUtilities.formattedSuccessResponse(jsonArray.toString());
+		JSONObject jsonObj = QueriesManager.findInDwhFor(keywordList);
+
+		return ServiceUtilities.formattedSuccessResponse(jsonObj.toString());
 	}
 }
