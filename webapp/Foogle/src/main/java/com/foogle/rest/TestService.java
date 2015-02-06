@@ -22,28 +22,29 @@ import com.foogle.rest.utils.MongoResult;
 import com.foogle.rest.utils.ServiceUtilities;
 
 @Path("/find")
-public class TestService {
+public class TestService
+{
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@GET
 	@Produces("application/json")
-	@Path("/{query}")
+	@Path("/mongo/{query}")
 	public Response findQueriesFor(@PathParam("query") String entry)
 	{
 		JSONArray jsonList = new JSONArray();
 
 		// TODO Lucene here
-		
+
 		LuceneAndMahoutUtilities utils = LuceneAndMahoutUtilities.getInstance();
-		
+
 		List<String> result = utils.tokenizerAndStemmer(entry);
-		
-		//logger.info("Lucene result: " + result);
+
+		// logger.info("Lucene result: " + result);
 
 		ArrayList<MongoResult> resultList = QueriesManager.findMongoResult(StringUtils.join(result, ' '));
 
-		for(MongoResult mResult : resultList)
+		for (MongoResult mResult : resultList)
 		{
 			Map<String, String> m = new HashMap<String, String>();
 			m.put("title", mResult.getTitle());
@@ -55,12 +56,18 @@ public class TestService {
 
 		return ServiceUtilities.formattedSuccessResponse(jsonList.toString());
 	}
-	
+
 	@GET
 	@Produces("application/json")
-	public Response findDWHr(@PathParam("query") String entry)
+	@Path("/dwh/{query}")
+	public Response findDWH(@PathParam("query") String entry)
 	{
-		QueriesManager.findInDwhFor("test");
-		return null;
+		LuceneAndMahoutUtilities utils = LuceneAndMahoutUtilities.getInstance();
+		
+		List<String> keywordList = utils.tokenizer(entry);
+		
+		JSONArray jsonArray = QueriesManager.findInDwhFor(keywordList);
+		logger.info(jsonArray.toString());
+		return ServiceUtilities.formattedSuccessResponse(jsonArray.toString());
 	}
 }

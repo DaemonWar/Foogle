@@ -2,10 +2,14 @@ package com.foogle.model.manager;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.apache.mahout.cf.taste.recommender.Recommender;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.mongodb.morphia.Morphia;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +20,8 @@ import com.foogle.model.dao.DAOSearchEntries;
 import com.foogle.model.dao.DAOSessionEntries;
 import com.foogle.model.dao.DAOTextEntry;
 import com.foogle.model.dao.DAOWordEntries;
+import com.foogle.model.dao.DAOdwhSingleton;
+import com.foogle.model.entities.MatchEntity;
 import com.foogle.model.entities.SearchEntries;
 import com.foogle.model.entities.SessionEntries;
 import com.foogle.model.entities.TextEntry;
@@ -165,4 +171,197 @@ public class QueriesManager
 		}
 		return mongoResultList;
 	}
+	
+    public static JSONArray findInDwhFor(List<String> entryList){
+        DAOSearchEntries dse = new DAOSearchEntries(DAOdwhSingleton.openConnection());
+        JSONArray jsonArray = new JSONArray();
+
+        List<String> hebergementCoupe = dse.findSQL("select distinct(country) from team_dim");
+
+        List<Integer> anneeCoupe = dse.findSQL("select year from cup_dim order by year");
+
+
+        ArrayList<MatchEntity> matchList = new ArrayList<MatchEntity>();
+
+        JSONObject jsonObj = new JSONObject();
+
+
+
+        for(String result : entryList){
+            logger.info("keyword :: "+result);
+        }
+
+        // variables
+        int year = 0;
+        String country1 = null;
+        String country2 = null;
+
+        // affectation des variables
+        for(String keyword : entryList){
+            if(hebergementCoupe.contains(keyword)){
+                if(country1==null){country1 = keyword;} else {country2 = keyword;}
+            }
+            if(parseInt(keyword)){
+                int yearTemp = Integer.parseInt(keyword);
+                if(anneeCoupe.contains(yearTemp)){
+                    year = yearTemp;
+                }
+            }
+        }
+        boolean bmatch = false;logger.info(country1+" : "+country2+" : "+year);
+        /** SI 1 Pays **/
+        // années d'hebergements de la derniere coupe du pays
+        if (country1 != null && country2 == null){
+
+            JSONArray jsonArrayTemp = new JSONArray();
+
+            List<Integer> resultList = dse.findSQL("select year from cup_dim where organizer = :organizer", "organizer", country1);
+
+            for(Integer result : resultList){
+                jsonArrayTemp.put(result);
+            }
+            try {
+                jsonObj.put("data", jsonArrayTemp);
+                jsonObj.put("header", country1);
+                jsonObj.put("title", "Years of hosting");
+
+                jsonArray.put(jsonObj);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        /** SI 2 Pays et 1 Annee **/
+        else if (country1 != null && country2 != null && year != 0){
+            logger.info("???????????????????????");
+
+            HashMap<String, Integer> team = new HashMap<String, Integer>();
+
+            //ID pays 1
+            List<Integer> resultList1 = dse.findSQL("select sid_team from team_dim where country = :country and (date_from, date_to) OVERLAPS ('"+year+"-01-01', '"+year+"-12-30')", "country", country1);
+            team.put(country1, resultList1.get(0));
+            //ID pays 2
+            List<Integer> resultList2 = dse.findSQL("select sid_team from team_dim where country = :country and (date_from, date_to) OVERLAPS ('"+year+"-01-01', '"+year+"-12-30')", "country", country2);
+            team.put(country2, resultList2.get(0));
+
+
+            //recuperation des matches
+            List<Object[]> resultList3 = dse.findSQL("select  date_id,total_goals_in_favor, goal_difference, sid_stage from team_in_match_fact where sid_team = :sid_team and sid_opponent = :sid_opponent", "sid_team", team.get(country1), "sid_opponent", team.get(country2) );
+
+            for(Object[] result : resultList3){
+
+                int date_id = Integer.parseInt(result[0].toString());
+                int score1 = Integer.parseInt(result[1].toString());
+                int score2 = score1 - Integer.parseInt(result[2].toString());
+                int sid_stage = Integer.parseInt(result[3].toString());
+                List<String> resultList5 = dse.findSQL("select name from stage_dim where sid_stage = "+sid_stage);
+                String stage = resultList5.get(0);
+
+                List<Object[]> resultList4 = dse.findSQL("select year,date from date_dim where date_id = "+date_id);
+                int year2 = Integer.parseInt(resultList4.get(0)[0].toString());
+                String date = resultList4.get(0)[1].toString();
+
+                matchList.add(new MatchEntity(country1, country2, score1, score2, year2, date, stage));    
+                bmatch = true;
+            }
+            //JSON
+            for(MatchEntity match : matchList){
+                if(match.year == year){
+                    try {
+                        jsonObj.put("country1", match.country1);
+                        jsonObj.put("score1", match.score1);
+                        jsonObj.put("country2", match.country2);
+                        jsonObj.put("score2", match.score2);
+                        jsonObj.put("date", match.date);
+                        jsonObj.put("stage", match.stage);
+
+                        jsonArray.put(jsonObj);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        if(country1 != null && country2 != null && (year == 0 || (year != 0 && bmatch == false))){
+            logger.info("!!!!!!!!!!!!!!!!!!!!!!");
+            matchList.clear();
+
+            HashMap<Integer,Integer> team1 = new HashMap<Integer,Integer>();
+            HashMap<Integer,Integer> team2 = new HashMap<Integer,Integer>();
+
+            for (Integer yearWC : anneeCoupe){
+                //ID pays 1
+                List<Integer> resultList1 = dse.findSQL("select sid_team from team_dim where country = :country and (date_from, date_to) OVERLAPS ('"+yearWC+"-01-01', '"+yearWC+"-12-30')", "country", country1);
+                if( ! resultList1.isEmpty())
+                    team1.put(yearWC, Integer.parseInt(resultList1.get(0).toString()));
+                //ID pays 2
+                List<Integer> resultList2 = dse.findSQL("select sid_team from team_dim where country = :country and (date_from, date_to) OVERLAPS ('"+yearWC+"-01-01', '"+yearWC+"-12-30')", "country", country2);
+                if( ! resultList2.isEmpty())
+                    team2.put(yearWC, Integer.parseInt(resultList2.get(0).toString()));
+            }
+            logger.info("team 1 2002 ="+team1.get(2002));logger.info("team 2 2002 ="+team2.get(2002));
+
+            for (Integer yearWC : anneeCoupe){
+                //recuperation des matches
+                List<Object[]> resultList3 = dse.findSQL("select date_id,total_goals_in_favor, goal_difference, sid_stage from team_in_match_fact where sid_team = "+team1.get(yearWC)+" and sid_opponent = "+team2.get(yearWC));
+                logger.info(yearWC+" : "+resultList3.size());
+                if( ! resultList3.isEmpty()){
+                    for(Object[] result : resultList3){
+
+                        int date_id = Integer.parseInt(result[0].toString());
+                        int score1 = Integer.parseInt(result[1].toString());
+                        int score2 = score1 - Integer.parseInt(result[2].toString());
+                        int sid_stage = Integer.parseInt(result[3].toString());
+                        List<String> resultList5 = dse.findSQL("select name from stage_dim where sid_stage = "+sid_stage);
+                        String stage = resultList5.get(0);
+
+                        List<Object[]> resultList4 = dse.findSQL("select year,date from date_dim where date_id = "+date_id);
+                        int year2 = Integer.parseInt(resultList4.get(0)[0].toString());
+                        String date = resultList4.get(0)[1].toString();
+                        logger.info("result : "+country1);
+                        logger.info("result : "+country2);
+                        logger.info("result : "+score1);
+                        logger.info("result : "+score2);
+                        logger.info("result : "+year2);
+                        logger.info("result : "+date);
+                        matchList.add(new MatchEntity(country1, country2, score1, score2, year2, date, stage));    logger.info("SIZE "+matchList.size());
+                    }
+                }
+            }
+            //JSON
+            for(MatchEntity match : matchList){
+                try {
+                    JSONObject jSonObj = new JSONObject();
+                    jSonObj.put("country1", match.country1);
+                    jSonObj.put("score1", match.score1);
+                    jSonObj.put("country2", match.country2);
+                    jSonObj.put("score2", match.score2);
+                    jSonObj.put("date", match.date);
+                    jSonObj.put("stage", match.stage);
+
+                    jsonArray.put(jSonObj);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+
+        return jsonArray;
+
+        //        for(String result : resultList){
+        //            logger.info("result :: "+result);
+        //        }
+    }
+
+    private static boolean parseInt(String keyword){
+        try{
+            Integer.parseInt(keyword);
+        } catch(NumberFormatException e){
+            return false;
+        }
+        return true;
+    }
 }

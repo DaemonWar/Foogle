@@ -91,19 +91,18 @@ public class DAOSearchEntries extends DAO<SearchEntries>
 		}
 	}
 	
-	public List findSQL(String sql, String... paramters) {
-		try{
-			Query q = em.createNativeQuery(sql);//"select id from users where username = :username"
-			
-			for (int i=0;i<paramters.length;i+=2){
-				q.setParameter(paramters[i], paramters[i+1]);//q.setParameter("username", "lt");
-				logger.info(paramters[i]+" :: "+paramters[i+1]);
-			}
-			
-			List<String> values = q.getResultList();
-			return values;
-		}catch (Exception e) {
-			return null;
-		}
-	}
+	public List findSQL(String sql, Object... parameters) {
+		  try{
+		   Query q = em.createNativeQuery(sql);//"select id from users where username = :username"
+		   
+		   for (int i=0;i<parameters.length;i+=2){
+		    q.setParameter((String)parameters[i], parameters[i+1]);//q.setParameter("username", "lt");
+		   }
+		   
+		   List values = q.getResultList();
+		   return values;
+		  }catch (Exception e) {
+		   return null;
+		  }
+		 }
 }
