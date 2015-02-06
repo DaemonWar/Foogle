@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.core.KeywordAnalyzer;
 import org.apache.lucene.analysis.core.StopAnalyzer;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -46,9 +45,9 @@ public class LuceneAndMahoutUtilities
 	}
 
 	private LuceneAndMahoutUtilities()
-	{   
+	{
 		analyzer1 = new EnglishAnalyzer(StopAnalyzer.ENGLISH_STOP_WORDS_SET);
-		analyzer2 = new KeywordAnalyzer();
+		analyzer2 = new StandardAnalyzer();
 	}
 
 	public List<String> tokenizerAndStemmer(String entry)
@@ -57,11 +56,11 @@ public class LuceneAndMahoutUtilities
 		{
 			List<String> result = new ArrayList<String>();
 
-			TokenStream stream = analyzer1.tokenStream("", new StringReader(entry));
+			TokenStream stream = analyzer1.tokenStream(" ", new StringReader(entry));
 
 			stream.reset();
 
-			while(stream.incrementToken())
+			while (stream.incrementToken())
 			{
 				result.add(stream.getAttribute(CharTermAttribute.class).toString());
 			}
@@ -96,6 +95,7 @@ public class LuceneAndMahoutUtilities
 			{
 				result.add(stream.getAttribute(CharTermAttribute.class).toString());
 			}
+
 			stream.close();
 
 			return result;
@@ -106,6 +106,7 @@ public class LuceneAndMahoutUtilities
 			return null;
 		}
 	}
+
 	public Recommender getRecommender()
 	{
 		try
