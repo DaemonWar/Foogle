@@ -72,7 +72,7 @@ public class Load extends HttpServlet {
 			InputStream inputStream = classLoader.getResourceAsStream("teams"+File.separator+fileName);
 		    try {
 		    	//text = new String(IOUtils.toString(inputStream, "windows-1252").getBytes(), "UTF-8");
-		    	text = new String(IOUtils.toString(inputStream).getBytes("windows-1252"), "UTF-8");
+		    	text = new String(IOUtils.toString(inputStream).getBytes());
 		    	
 		    } finally {
 		        inputStream.close();
