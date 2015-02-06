@@ -52,9 +52,17 @@ $(function()
 
 	searchPattern = $("#search_pattern").html();
 	$("#search_pattern").remove();
+
+	dwhType1Pattern = $("#dwh_type_1_pattern").html();
+	$("#dwh_type_1_pattern").remove();
+
+	dwhType2Pattern = $("#dwh_type_2_pattern").html();
+	$("#dwh_type_2_pattern").remove();
 });
 
 var searchPattern;
+var dwhType1Pattern;
+var dwhType2Pattern;
 
 var searchMode = false;
 
@@ -94,6 +102,8 @@ function updateTabButton()
 		$("#dwh_tab").show();
 
 		showDataWarehouseSearch();
+
+		searchInDWH();
 	}
 }
 
@@ -147,27 +157,37 @@ function updateRecommendations()
 
 	if (input != "")
 	{
-		getResponseFromServer("reco", "for/" + input, function(data)
+		//getResponseFromServer("reco", $.cookie("sessionId"), function(data)
+		getResponseFromServer("reco", input, function(data)
 		{
 			$("#recommendations>span").remove();
-
-			$("#recommendations_container").hide();
-
-			if(data.length != 0)
+			
+			if (data.length != 0)
 			{
-				data.forEach(function(entry)
-				{
-					$("#recommendations").append($("<span></span>").text(entry));
-				});
-
-				$("#recommendations>span").click(function(e)
+				$("#recommendations_container").show();
+			} else
+			{
+				$("#recommendations_container").hide();
+			}
+			var clickReco = function()
+			{
+				$(this).click(function(e)
 				{
 					$("#search_field").val($(this).text());
 					$("#search_form").submit();
 				});
-				
-				$("#recommendations_container").show();
-			}
+			};
+
+			var wordArray = [];
+
+			data.forEach(function(entry)
+			{
+				entry = eval("(" + entry + ")");
+
+				wordArray.push({text: entry.key, weight: entry.value, afterWordRender:clickReco})
+			});
+			
+			$("#recommendations").jQCloud(wordArray);
 		});
 	}
 }
@@ -219,13 +239,7 @@ function saveQuery()
 
 	if (input != "")
 	{
-		getResponseFromServer("query", "put/" + input, function()
-		{
-			if($.cookie("userId") != undefined && $.cookie("sessionId") != undefined)
-			{
-				getResponseFromServer("query", "save/" + input + "/" + $.cookie("userId") + "/" + $.cookie("sessionId"));
-			}
-		});
+		getResponseFromServer("query", "save/" + input + "/" + $.cookie("userId") + "/" + $.cookie("sessionId"));
 	}
 }
 
@@ -275,6 +289,11 @@ function searchOnDbPedia()
 
 			$("#dbp_result").append(obj);
 		});
+
+		if(data.results.length == 0)
+		{
+			$("#dbp_result").append("No result");
+		}
 	});
 }
 
@@ -302,11 +321,61 @@ function searchOnWeb()
 	});
 }
 
+function searchInDWH()
+{
+	$("#dwh_result").html("");
+
+	getResponseFromServer("find", "dwh/" + $("#search_field").val(), function(data)
+	{
+		if(data.type != null)
+		{
+			if(data.type == 1)
+			{
+				data.result.forEach(function(item)
+				{
+					var obj = $(dwhType1Pattern);
+					obj.find(".stage").text("Match: " + item.stage);
+					obj.find(".date").text(item.date);
+					obj.find(".country:eq(0)").text(item.country1);
+					obj.find(".country:eq(1)").text(item.country2);
+					obj.find(".score").text(item.score1 + "-" + item.score2);
+
+					$("#dwh_result").append(obj);
+				});
+			} else if (data.type == 2)
+			{
+				item = data.result;
+
+				var obj = $(dwhType2Pattern);
+				obj.find(".header").text(item.header);
+				obj.find(".years").text(item.title + ":");
+				item.data.forEach(function(year)
+				{
+					obj.append($("<span class=\"host\"></span>").text(year));
+				});
+
+				if(item.data.length == 0)
+				{
+					obj.append($("<span class=\"host\"></span>").text("Never hosting World Cup"));
+				}
+
+				$("#dwh_result").append(obj);
+			} else
+			{
+				$("#dwh_result").html(data.type);
+			}
+		} else
+		{
+			$("#dwh_result").html("No result");
+		}
+	});
+}
+
 function searchInTextReports()
 {
 	$("#tere_result").html("");
 
-	getResponseFromServer("find", $("#search_field").val(), function(data)
+	getResponseFromServer("find", "mongo/" + $("#search_field").val(), function(data)
 	{
 		data.forEach(function(entry)
 		{
@@ -315,7 +384,7 @@ function searchInTextReports()
 			obj.find("span").text(entry.source);
 			if(entry.content != undefined && entry.content != "")
 			{
-				obj.find("p").html(entry.content.replace("\n\r", "<br/><br/>"));	
+				obj.find("p").html(entry.content.replace(/\[[0-9].\]/g, ""));	
 			} else
 			{
 				obj.find("p").text("No desciption");
@@ -325,6 +394,11 @@ function searchInTextReports()
 
 			$("#tere_result").append(obj);
 		});
+
+		if(data.length == 0)
+		{
+			$("#tere_result").append("No result");
+		}
 	});
 }
 

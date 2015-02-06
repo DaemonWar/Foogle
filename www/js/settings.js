@@ -4,7 +4,9 @@ $(function()
 
 	$("#settings_close_button").click(closeSettings);
 
-	$(".option").click(function(e)
+	$("#connect").click(processConnect);
+
+	$(".option, .option_bis").click(function(e)
 	{
 		var count = $(".option.on").size();
 
@@ -62,7 +64,62 @@ function initOptions()
 		{
 			$("#web").removeClass("on");
 		}
+
+		if($.cookie('aggre') == undefined)
+		{
+			$.cookie('aggre', true);
+		} else if($.cookie('aggre') == "false")
+		{
+			$("#aggre").removeClass("on");
+		}
+
+		if($.cookie('account') == undefined)
+		{
+			$.cookie('account', false);
+		} else if($.cookie('account') != "false")
+		{
+			connect($.cookie('account'));
+		}
 	}
+}
+
+var connected = false;
+
+function processConnect(e)
+{
+	if(connected)
+	{
+		disconnect();
+	} else
+	{
+		connect($("#account").val());
+	}
+}
+
+function connect(name)
+{
+	connected = true;
+
+	$.cookie('account', name);
+
+	$("#account").val(name);
+	$("#account").prop('disabled', true);
+
+	$("#connect").addClass("off");
+	$("#connect").text("Disconnect");
+}
+
+function disconnect()
+{
+	connected = false;
+
+	$.cookie('account', false);
+
+	$("#account").val("");
+	$("#account").prop('disabled', false);
+
+	$("#connect").removeClass("off");
+	$("#connect").text("Connect");
 }
 
 function saveOptions()
@@ -76,15 +133,24 @@ function saveOptions()
 		$.cookie('dbp', $("#dbp").hasClass("on"));
 
 		$.cookie('web', $("#web").hasClass("on"));
+
+		$.cookie('aggre', $("#aggre").hasClass("on"));
 	}
 }
 
 function openSettings(e)
 {
 	$("#settings").fadeIn(200);
+
+	$(document).off("keypress");
 }
 
 function closeSettings(e)
 {
 	$("#settings").fadeOut(200);
+
+	$(document).keypress(function()
+	{
+		$("#search_field").focus();
+	});
 }
