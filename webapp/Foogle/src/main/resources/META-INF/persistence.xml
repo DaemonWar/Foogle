@@ -37,7 +37,7 @@ http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
 			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost/foogle" />
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
 			<property name="javax.persistence.jdbc.user" value="postgres" />
-			<property name="javax.persistence.jdbc.password" value="0000" />
+			<property name="javax.persistence.jdbc.password" value="root" />
 <!-- 			<property name="hibernate.default_schema" value="v4" /> -->
 			<property name="hibernate.hbm2ddl.auto" value="update" />
 			<property name="hibernate.archive.autodetection" value="class" />
