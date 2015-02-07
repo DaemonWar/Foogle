@@ -4,11 +4,13 @@
 		<meta charset="utf-8" />
 
 		<link rel="stylesheet" href="./css/style.css" />
+		<link rel="stylesheet" href="./css/jqcloud.css" />
 		<link rel="icon" href="./img/icon.png" />
 
 		<script src="./js/jquery-2.1.1.min.js"></script>
 		<script src="./js/jquery-ui.min.js"></script>
 		<script src="./js/jquery.cookie.js"></script>
+		<script src="./js/jqcloud-1.0.4.min.js"></script>
 		<script src="./js/rest.js"></script>
 		<script src="./js/allowcookies.js"></script>
 		<script src="./js/script.js"></script>
@@ -41,12 +43,11 @@
 					<span id="dbp_tab" class="search_tab">DbPedia.com</span>
 					<span id="web_tab" class="search_tab">Web</span>
 				</div>
-				<span id="number_results">About 302 results</span>
 			</div>
-			<div id="dwh_result" class="results_list">data warehouse</div>
+			<div id="dwh_result" class="results_list"></div>
 			<div id="tere_result" class="results_list"></div>
 			<div id="dbp_result" class="results_list"></div>
-			<div id="web_result" class="results_list">web</div>
+			<div id="web_result" class="results_list"></div>
 			<div id="recommendations_container">
 				We recommand :
 				<div id="recommendations"></div>
@@ -59,11 +60,16 @@
 		<div id="settings">
 			<div id="option_box">
 				<div id="settings_close_button"></div>
-				<h1>Data sources</h1>
+				<h1>Settings</h1>
 				<div id="dwh" class="option on">Data warehouse</div>
 				<div id="tere" class="option on">Text reports</div>
 				<div id="dbp" class="option on">DbPedia.com</div>
 				<div id="web" class="option on">Web (Google)</div>
+				<div class="sep"></div>
+				<div id="aggre" class="option_bis on">Aggregate results</div>
+				<div class="sep"></div>
+				<input id="account" type="text" placeholder="Account"/>
+				<a id="connect">Connect</a>
 			</div>
 		</div>
 		<div id="tere_popup">
@@ -82,6 +88,23 @@
 				<a target="_blank"></a>
 				<span></span>
 				<p></p>
+			</div>
+		</div>
+		<div id="dwh_type_1_pattern">
+			<div class="dwh_type_1">
+				<span class="stage"></span>
+				<span class="date"></span>
+				<span class="centered">
+					<span class="country"></span>
+					<span class="score"></span>
+					<span class="country"></span>
+				</span>
+			</div>
+		</div>
+		<div id="dwh_type_2_pattern">
+			<div class="dwh_type_2">
+				<span class="header"></span>
+				<span class="years"></span>
 			</div>
 		</div>
 	</body>

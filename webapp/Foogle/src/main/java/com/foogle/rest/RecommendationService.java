@@ -7,13 +7,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
-import org.apache.mahout.cf.taste.recommender.RecommendedItem;
 import org.codehaus.jettison.json.JSONObject;
 import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.foogle.model.dao.DAOWordEntries;
+import com.foogle.model.entities.SearchEntries;
 import com.foogle.model.manager.QueriesManager;
 import com.foogle.rest.utils.ServiceUtilities;
 
@@ -23,27 +22,29 @@ public class RecommendationService
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	@GET
-	@Path("/{query}")
-	public Response getReco(@PathParam("query") String sessionId)
+	@Path("/{session}")
+	public Response getReco(@PathParam("session") String entry)
 	{
 		try
 		{
 			JSONArray json = new JSONArray();
 
-			List<RecommendedItem> keywords = QueriesManager.findRecommendationsFor(sessionId);
+			List<SearchEntries> queries = QueriesManager.findRecommendationsFor(entry);
 			
-			DAOWordEntries dwe = new DAOWordEntries();
+			//DAOWordEntries dwe = new DAOWordEntries();
+			logger.info(String.valueOf(queries.size()));
 
-			for (RecommendedItem keyword : keywords)
+			for (SearchEntries query : queries)
 			{
-				logger.info("Item : " + dwe.find((int) keyword.getItemID()).getWord());
-				logger.info("Value : " + String.valueOf(keyword.getValue()));
-				
-				JSONObject jo = new JSONObject();
-
-				jo.put(dwe.find((int) keyword.getItemID()).getWord(), String.valueOf(keyword.getValue()));
-				
-				json.put(jo);
+				if(!query.getQuery().equals(entry))
+				{
+					JSONObject jo = new JSONObject();
+	
+					jo.put("key", query.getQuery());
+					jo.put("value", String.valueOf(query.getCount()));
+					
+					json.put(jo);
+				}
 			}
 
 			return ServiceUtilities.formattedSuccessResponse(json.toString());
@@ -51,7 +52,7 @@ public class RecommendationService
 		{
 			logger.info(e.getMessage());
 			
-			return null;
+			return ServiceUtilities.formattedSuccessResponse(new JSONArray().toString());
 		}
 	}
 }
