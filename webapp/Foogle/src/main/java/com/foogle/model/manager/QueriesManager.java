@@ -214,10 +214,18 @@ public class QueriesManager
 
 			JSONArray jsonArrayTemp = new JSONArray();
 
-			List<Integer> resultList = dse.findSQL("select year from cup_dim where organizer = :organizer", "organizer", country1);
-
-			for(Integer result : resultList){
-				jsonArrayTemp.put(result);
+			List<Object[]> resultList = dse.findSQL("select year, sid_cup from cup_dim where organizer = :organizer", "organizer", country1);
+			
+			for(Object[] result : resultList){
+				List<String> resultList1 = dse.findSQL("SELECT country FROM team_in_cup_fact as t, match_fact as m, team_dim as team WHERE t.sid_cup = m.sid_cup AND t.sid_cup = "+Integer.parseInt(result[1].toString())+" AND sid_stage = 102 AND won = 1 AND team.sid_team = t.sid_team");
+				JSONObject jSonObjTemp = new JSONObject();
+				try {
+					jSonObjTemp.put("date", Integer.parseInt(result[0].toString()));
+					jSonObjTemp.put("winner", resultList1.get(0));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				jsonArrayTemp.put(jSonObjTemp);
 			}
 			
 			JSONObject jSonObj = new JSONObject();
